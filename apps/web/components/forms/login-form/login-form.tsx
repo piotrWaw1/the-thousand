@@ -13,6 +13,7 @@ import { Controller, useForm } from "react-hook-form"
 import z from "zod"
 import { Button } from "@workspace/ui/components/button"
 import Link from "next/link"
+import { loginAction } from "./login-action"
 
 const formSchema = z.object({
   email: z.email("Enter a valid email address").min(1, "Email is required"),
@@ -22,8 +23,10 @@ const formSchema = z.object({
     .min(8, "Password must be at least 8 characters"),
 })
 
+export type LoginFormData = z.infer<typeof formSchema>
+
 export function LoginFrom() {
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<LoginFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
@@ -31,8 +34,8 @@ export function LoginFrom() {
     },
   })
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log(data)
+  async function onSubmit(data: LoginFormData) {
+    const response = await loginAction(data)
   }
 
   return (

@@ -3,7 +3,7 @@ import { cookies } from "next/headers"
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
-
+console.log(supabaseUrl)
 export async function createClientServer() {
   const cookieStore = await cookies()
 

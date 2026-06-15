@@ -12,6 +12,8 @@ import { Input } from "@workspace/ui/components/input"
 import Link from "next/link"
 import { Controller, useForm } from "react-hook-form"
 import z from "zod"
+import { signuAction } from "./signup-action"
+import { useActionState } from "react"
 
 const formSchema = z
   .object({
@@ -28,19 +30,21 @@ const formSchema = z
     path: ["repeatPassword"],
   })
 
+export type SignupFormData = z.infer<typeof formSchema>
+
 export default function SignupFrom() {
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<SignupFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      userName: "",
-      email: "",
-      password: "",
-      repeatPassword: "",
+      userName: "test",
+      email: "nowakmail2@gmail.com",
+      password: "12345678",
+      repeatPassword: "12345678",
     },
   })
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log(data)
+  async function onSubmit(data: SignupFormData) {
+    const response = await signuAction(data)
   }
 
   return (
