@@ -10,10 +10,16 @@ import {
 } from "@workspace/ui/components/field"
 import { Input } from "@workspace/ui/components/input"
 import Link from "next/link"
-import { Controller, useForm } from "react-hook-form"
+import { Controller, FormProvider, useForm } from "react-hook-form"
 import z from "zod"
 import { signuAction } from "./signup-action"
-import { useActionState } from "react"
+import { useActionState, useState } from "react"
+import SubmitButton from "@/components/submit-button"
+import { useRouter } from "next/navigation"
+import {
+  toastError,
+  toastSuccess,
+} from "@/components/toast-variants/toast-variants"
 
 const formSchema = z
   .object({
@@ -33,6 +39,8 @@ const formSchema = z
 export type SignupFormData = z.infer<typeof formSchema>
 
 export default function SignupFrom() {
+  const [isPending, setIsPending] = useState(false)
+  const router = useRouter()
   const form = useForm<SignupFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -44,103 +52,120 @@ export default function SignupFrom() {
   })
 
   async function onSubmit(data: SignupFormData) {
+    setIsPending(true)
     const response = await signuAction(data)
+    if (response.success) {
+      toastSuccess("Sign Up success")
+      router.push("/login")
+    } else {
+      toastError(response.message)
+    }
+    setIsPending(false)
   }
 
   return (
-    <form
-      id="form-login"
-      onSubmit={form.handleSubmit(onSubmit)}
-      className="flex flex-col gap-5"
-    >
-      <FieldGroup>
-        <Controller
-          name="userName"
-          control={form.control}
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="form-rhf-userName">User name</FieldLabel>
-              <Input
-                {...field}
-                id="form-rhf-userName"
-                aria-invalid={fieldState.invalid}
-                placeholder="cardshark"
-              />
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
-        />
-        <Controller
-          name="email"
-          control={form.control}
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="form-rhf-email">Email</FieldLabel>
-              <Input
-                {...field}
-                id="form-rhf-email"
-                aria-invalid={fieldState.invalid}
-                placeholder="your@example.com"
-                autoComplete="email"
-              />
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
-        />
-        <Controller
-          name="password"
-          control={form.control}
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="form-rhf-password">Pasword</FieldLabel>
-              <Input
-                {...field}
-                id="form-rhf-password"
-                aria-invalid={fieldState.invalid}
-                placeholder="••••••••"
-                type="password"
-              />
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
-        />
-        <Controller
-          name="repeatPassword"
-          control={form.control}
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="form-rhf-repeatPassword">
-                Repeat password
-              </FieldLabel>
-              <Input
-                {...field}
-                id="form-rhf-repeatPassword"
-                aria-invalid={fieldState.invalid}
-                placeholder="••••••••"
-                type="password"
-              />
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
-        />
-        <div>
-          <Button
-            type="submit"
-            size="lg"
-            className="h-12 w-full bg-primary text-base font-semibold text-primary-foreground hover:bg-primary/90"
-          >
-            Sign Up
-          </Button>
-          <Button
-            asChild
-            variant="outline"
-            size="lg"
-            className="mt-4 h-12 w-full border-border bg-transparent text-sm font-medium text-foreground hover:bg-secondary"
-          >
-            <Link href="/login">Already have account? Login</Link>
-          </Button>
-        </div>
-      </FieldGroup>
-    </form>
+    <FormProvider {...form}>
+      <form
+        id="form-login"
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col gap-5"
+      >
+        <FieldGroup>
+          <Controller
+            name="userName"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="form-rhf-userName">User name</FieldLabel>
+                <Input
+                  {...field}
+                  id="form-rhf-userName"
+                  aria-invalid={fieldState.invalid}
+                  placeholder="cardshark"
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+          <Controller
+            name="email"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="form-rhf-email">Email</FieldLabel>
+                <Input
+                  {...field}
+                  id="form-rhf-email"
+                  aria-invalid={fieldState.invalid}
+                  placeholder="your@example.com"
+                  autoComplete="email"
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+          <Controller
+            name="password"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="form-rhf-password">Pasword</FieldLabel>
+                <Input
+                  {...field}
+                  id="form-rhf-password"
+                  aria-invalid={fieldState.invalid}
+                  placeholder="••••••••"
+                  type="password"
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+          <Controller
+            name="repeatPassword"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="form-rhf-repeatPassword">
+                  Repeat password
+                </FieldLabel>
+                <Input
+                  {...field}
+                  id="form-rhf-repeatPassword"
+                  aria-invalid={fieldState.invalid}
+                  placeholder="••••••••"
+                  type="password"
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+          <div>
+            <SubmitButton
+              className="h-12 w-full bg-primary text-base font-semibold text-primary-foreground hover:bg-primary/90"
+              isActionPending={isPending}
+            >
+              Sign Up
+            </SubmitButton>
+            <Button
+              asChild
+              variant="outline"
+              size="lg"
+              className="mt-4 h-12 w-full border-border bg-transparent text-sm font-medium text-foreground hover:bg-secondary"
+            >
+              <Link href="/login">Already have account? Login</Link>
+            </Button>
+          </div>
+        </FieldGroup>
+      </form>
+    </FormProvider>
   )
 }

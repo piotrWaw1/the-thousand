@@ -13,6 +13,5 @@ export async function loginAction(formData: LoginFormData) {
     return { message: "Invalid credentials", success: false }
   }
 
-  console.log("Success")
   return { message: "Login Success", success: true }
 }

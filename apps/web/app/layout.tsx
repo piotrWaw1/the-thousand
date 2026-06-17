@@ -1,5 +1,5 @@
-import { Geist, Geist_Mono, Noto_Sans } from "next/font/google"
-
+import { Geist_Mono, Noto_Sans } from "next/font/google"
+import { Toaster } from "@workspace/ui/components/sonner"
 import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@workspace/ui/lib/utils"
 import { AnimatedBackground } from "@/components/animated-background"
@@ -32,6 +32,7 @@ export default function RootLayout({
         <ThemeProvider>
           <AnimatedBackground />
           {children}
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>
