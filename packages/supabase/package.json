@@ -2,6 +2,7 @@
   "name": "@workspace/supabase",
   "main": "./index.ts",
   "exports": {
-    ".": "./index.ts"
+    ".": "./index.ts",
+    "./client": "./client.ts"
   }
 }

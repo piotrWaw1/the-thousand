@@ -31,7 +31,7 @@ export default function RootLayout({
       <body>
         <ThemeProvider>
           <AnimatedBackground />
-          <main className="container m-auto">{children}</main>
+          {children}
         </ThemeProvider>
       </body>
     </html>

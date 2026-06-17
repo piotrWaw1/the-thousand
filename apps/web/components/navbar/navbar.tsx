@@ -1,9 +1,13 @@
+"use server"
+
 import { Button } from "@workspace/ui/components/button"
-import { CircleQuestionMark, Spade } from "lucide-react"
+import { CircleQuestionMark, LoaderCircle } from "lucide-react"
 import Link from "next/link"
 import TheThousandLogo from "./the-thousand-logo"
+import NavButtons from "./nav-buttons"
+import { Suspense } from "react"
 
-export default function Navbar() {
+export default async function Navbar() {
   return (
     <header>
       <nav className="relative z-10 flex items-center justify-between gap-4 px-5 py-5 sm:px-8">
@@ -20,21 +24,15 @@ export default function Navbar() {
             </Link>
           </Button>
         </div>
-        <div className="flex items-center gap-2">
-          <Button
-            asChild
-            variant="outline"
-            className="text-foreground hover:bg-secondary hover:text-foreground"
-          >
-            <Link href="/login">Login</Link>
-          </Button>
-          <Button
-            asChild
-            className="bg-primary text-primary-foreground hover:bg-primary/90"
-          >
-            <Link href="/signup">Sign Up</Link>
-          </Button>
-        </div>
+        <Suspense
+          fallback={
+            <div>
+              <LoaderCircle />
+            </div>
+          }
+        >
+          <NavButtons />
+        </Suspense>
       </nav>
     </header>
   )

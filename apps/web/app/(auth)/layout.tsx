@@ -1,4 +1,4 @@
-import TheThousandLogo from "@/components/the-thousand-logo"
+import TheThousandLogo from "@/components/navbar/the-thousand-logo"
 
 export default function AuthLayout({
   children,
