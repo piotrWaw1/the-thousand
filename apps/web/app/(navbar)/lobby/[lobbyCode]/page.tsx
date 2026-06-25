@@ -14,6 +14,12 @@ export default async function LobbyPage({
     .eq("code", lobbyCode)
     .single()
 
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  const isHost = user?.id === data.host_id
+
   if (!data || error) {
     return (
       <section className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 px-6 pt-2 pb-16">
@@ -24,5 +30,5 @@ export default async function LobbyPage({
     )
   }
 
-  return <Lobby data={data} lobbyCode={lobbyCode} />
+  return <Lobby data={data} lobbyCode={lobbyCode} isHost={isHost} />
 }

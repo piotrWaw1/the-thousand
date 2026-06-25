@@ -4,7 +4,8 @@ import { Globe, Lock, Play, Users } from "lucide-react"
 import CopyCodeButton from "./copy-code-button"
 import useRealtimeLobby from "@/hooks/use-realtime-lobby"
 import { Button } from "@workspace/ui/components/button"
-import LobbySettings from "./lobby-settings"
+import LobbySettings from "./form/lobby-settings-form"
+import { cn } from "@/lib/utils"
 
 interface LobbyProps {
   data: {
@@ -16,10 +17,11 @@ interface LobbyProps {
     host_id: string
   }
   lobbyCode: string
+  isHost: boolean
 }
 
 export default function Lobby(props: LobbyProps) {
-  const { data, lobbyCode } = props
+  const { data, lobbyCode, isHost } = props
 
   useRealtimeLobby(lobbyCode)
 
@@ -41,8 +43,9 @@ export default function Lobby(props: LobbyProps) {
         </div>
         <CopyCodeButton code={lobbyCode} />
       </div>
-
-      <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
+      <div
+        className={cn("grid gap-6", isHost ? "lg:grid-cols-[1fr_320px]" : "")}
+      >
         {/* Players list */}
         <div className="rounded-xl border border-border bg-card/60 p-5 backdrop-blur-sm">
           <div className="mb-4 flex items-center justify-between">
@@ -118,13 +121,16 @@ export default function Lobby(props: LobbyProps) {
         </div>
 
         {/* Lobby settings */}
-        <LobbySettings
-          data={{
-            lobbyName: data.name,
-            maxPlayers: data.max_players.toString(),
-            private: data.private.toString(),
-          }}
-        />
+        {isHost && (
+          <LobbySettings
+            data={{
+              lobbyName: data.name,
+              maxPlayers: data.max_players.toString(),
+              private: data.private.toString(),
+            }}
+            lobbyCode={lobbyCode}
+          />
+        )}
       </div>
 
       {/* Start game */}

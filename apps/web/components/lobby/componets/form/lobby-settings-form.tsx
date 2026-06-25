@@ -14,9 +14,10 @@ import {
   RadioGroupItem,
 } from "@workspace/ui/components/radio-group"
 import { Globe, Settings, Lock } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Controller, FormProvider, useForm } from "react-hook-form"
 import z from "zod"
+import lobbySettingsFormAction from "./lobby-settings-form-action"
 
 const formSchema = z.object({
   lobbyName: z.string().min(3, "Lobby name is required"),
@@ -28,20 +29,27 @@ export type LobbySettingsFormData = z.infer<typeof formSchema>
 
 export default function LobbySettings({
   data,
+  lobbyCode,
 }: {
   data: LobbySettingsFormData
+  lobbyCode: string
 }) {
   const [isPending, setIsPending] = useState(false)
   const form = useForm<LobbySettingsFormData>({
     resolver: zodResolver(formSchema),
+    mode: "onChange",
     defaultValues: { ...data },
   })
-
-  console.log(form.formState.isDirty && form.formState.isValid)
-
-  const onSubmit = (data: LobbySettingsFormData) => {
-    console.log(data)
+  console.log(data)
+  const onSubmit = async (data: LobbySettingsFormData) => {
+    setIsPending(true)
+    lobbySettingsFormAction(data, lobbyCode)
+    setIsPending(false)
   }
+
+  useEffect(() => {
+    form.trigger()
+  }, [])
 
   return (
     <aside className="rounded-xl border border-border bg-card/60 p-5 backdrop-blur-sm">
