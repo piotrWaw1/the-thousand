@@ -1,4 +1,4 @@
-import { LoginFrom } from "@/components/forms/login-form/login-form"
+import { LoginFrom } from "@/components/auth-forms/login-form/login-form"
 import {
   Card,
   CardContent,

@@ -1,4 +1,4 @@
-import ResetPasswordForm from "@/components/forms/reset-password-form/reset-password-form"
+import ResetPasswordForm from "@/components/auth-forms/reset-password-form/reset-password-form"
 import {
   Card,
   CardContent,

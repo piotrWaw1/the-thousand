@@ -4,7 +4,8 @@
     "paths": {
       "@/*": ["./*"],
       "@workspace/ui/*": ["../../packages/ui/src/*"],
-      "@workspace/supabase": ["../../packages/supabase/index.ts"]
+      "@workspace/supabase": ["../../packages/supabase/index.ts"],
+      "@workspace/supabase/client": ["../../packages/supabase/client.ts"]
     },
     "plugins": [
       {

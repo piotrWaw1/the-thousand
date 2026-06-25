@@ -1,11 +1,11 @@
-import Navbar from "@/components/navbar/navbar"
+import { CreateLobbyButton } from "@/components/lobby/create/create-lobby-button"
 import { Button } from "@workspace/ui/components/button"
-import { Play, Plus, Search, Spade } from "lucide-react"
+import { Play, Search, Spade } from "lucide-react"
 import Link from "next/link"
 
-export default function Page() {
+export default async function Page() {
   return (
-    <section className="mt-20 flex flex-1 flex-col items-center justify-center text-center">
+    <section className="flex flex-1 flex-col items-center justify-center text-center">
       <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-4 py-1.5 text-xs font-medium tracking-[0.2em] text-muted-foreground uppercase backdrop-blur-sm">
         <Spade className="size-3.5 text-primary" aria-hidden="true" />
         The Thousand Online Card Game
@@ -44,17 +44,7 @@ export default function Page() {
             Find Lobby
           </Link>
         </Button>
-        <Button
-          asChild
-          size="lg"
-          variant="outline"
-          className="h-14 w-full gap-2 border-border bg-card/60 text-base font-semibold text-foreground backdrop-blur-sm transition-transform hover:-translate-y-0.5 hover:bg-secondary"
-        >
-          <Link href="/lobby/create">
-            <Plus className="size-5" aria-hidden="true" />
-            Create Lobby
-          </Link>
-        </Button>
+        <CreateLobbyButton />
       </div>
     </section>
   )

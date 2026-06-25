@@ -14,22 +14,87 @@ export type Database = {
   }
   public: {
     Tables: {
+      lobbies: {
+        Row: {
+          code: string
+          created_at: string
+          host_id: string
+          id: string
+          max_players: number
+          name: string
+          private: boolean
+          status: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          host_id?: string
+          id?: string
+          max_players?: number
+          name?: string
+          private?: boolean
+          status?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          host_id?: string
+          id?: string
+          max_players?: number
+          name?: string
+          private?: boolean
+          status?: string
+        }
+        Relationships: []
+      }
+      lobby_members: {
+        Row: {
+          id: string
+          is_ready: boolean
+          joined_at: string
+          lobby_id: string
+          user_id: string
+          username: string
+        }
+        Insert: {
+          id?: string
+          is_ready?: boolean
+          joined_at?: string
+          lobby_id: string
+          user_id: string
+          username: string
+        }
+        Update: {
+          id?: string
+          is_ready?: boolean
+          joined_at?: string
+          lobby_id?: string
+          user_id?: string
+          username?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lobby_members_lobby_id_fkey"
+            columns: ["lobby_id"]
+            isOneToOne: true
+            referencedRelation: "lobbies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       users: {
         Row: {
           created_at: string
-          email: string
           id: string
           user_name: string
         }
         Insert: {
           created_at?: string
-          email: string
           id?: string
           user_name: string
         }
         Update: {
           created_at?: string
-          email?: string
           id?: string
           user_name?: string
         }
@@ -40,7 +105,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      lobby_is_full: { Args: { p_lobby_id: string }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
