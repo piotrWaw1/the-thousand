@@ -41,6 +41,14 @@ export async function createLobbyAction() {
       .single()
 
     if (!error) {
+      // await supabase
+      //   .from("lobby_members")
+      //   .insert({
+      //     lobby_id: data.id,
+      //     user_id: data.host_id,
+      //     user_name: user.user_metadata.user_name,
+      //   })
+
       redirect(`/lobby/${data.code}`)
     }
   }

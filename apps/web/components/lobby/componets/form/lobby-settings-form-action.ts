@@ -5,7 +5,7 @@ import { LobbySettingsFormData } from "./lobby-settings-form"
 
 export default async function lobbySettingsFormAction(
   formData: LobbySettingsFormData,
-  lobbyCode: string
+  lobbyId: string
 ) {
   const supabase = await createClientServer()
   const {
@@ -23,10 +23,8 @@ export default async function lobbySettingsFormAction(
       name: formData.lobbyName,
       private: formData.private,
     })
-    .eq("code", lobbyCode)
+    .eq("id", lobbyId)
     .eq("host_id", user.id)
-
-  console.log(error)
 
   if (error) {
     return { message: "Error", success: false }

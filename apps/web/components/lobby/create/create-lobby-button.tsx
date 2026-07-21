@@ -8,7 +8,11 @@ import {
   toastSuccess,
 } from "@/components/toast-variants/toast-variants"
 
-export function CreateLobbyButton() {
+interface CreateLobbyButtonProps {
+  disabled?: boolean
+}
+
+export function CreateLobbyButton({ disabled }: CreateLobbyButtonProps) {
   const createLobby = async () => {
     const response = await createLobbyAction()
     if (response.success) {
@@ -22,6 +26,7 @@ export function CreateLobbyButton() {
     <Button
       size="lg"
       variant="outline"
+      disabled={disabled}
       className="h-14 w-full gap-2 border-border bg-card/60 text-base font-semibold text-foreground backdrop-blur-sm transition-transform hover:-translate-y-0.5 hover:bg-secondary"
       onClick={createLobby}
     >

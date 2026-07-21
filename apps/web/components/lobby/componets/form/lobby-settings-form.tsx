@@ -18,6 +18,7 @@ import { useEffect, useState } from "react"
 import { Controller, FormProvider, useForm } from "react-hook-form"
 import z from "zod"
 import lobbySettingsFormAction from "./lobby-settings-form-action"
+import { toastSuccess } from "@/components/toast-variants/toast-variants"
 
 const formSchema = z.object({
   lobbyName: z.string().min(3, "Lobby name is required"),
@@ -29,10 +30,10 @@ export type LobbySettingsFormData = z.infer<typeof formSchema>
 
 export default function LobbySettings({
   data,
-  lobbyCode,
+  lobbyId,
 }: {
   data: LobbySettingsFormData
-  lobbyCode: string
+  lobbyId: string
 }) {
   const [isPending, setIsPending] = useState(false)
   const form = useForm<LobbySettingsFormData>({
@@ -40,10 +41,14 @@ export default function LobbySettings({
     mode: "onChange",
     defaultValues: { ...data },
   })
-  console.log(data)
+
   const onSubmit = async (data: LobbySettingsFormData) => {
     setIsPending(true)
-    lobbySettingsFormAction(data, lobbyCode)
+    const response = await lobbySettingsFormAction(data, lobbyId)
+    if (response.success) {
+      toastSuccess("Changes saved")
+      form.reset(data)
+    }
     setIsPending(false)
   }
 

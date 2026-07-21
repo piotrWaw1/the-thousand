@@ -1,9 +1,15 @@
 import { CreateLobbyButton } from "@/components/lobby/create/create-lobby-button"
+import { createClientServer } from "@workspace/supabase"
 import { Button } from "@workspace/ui/components/button"
 import { Play, Search, Spade } from "lucide-react"
 import Link from "next/link"
 
 export default async function Page() {
+  const supabase = await createClientServer()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
   return (
     <section className="flex flex-1 flex-col items-center justify-center text-center">
       <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-4 py-1.5 text-xs font-medium tracking-[0.2em] text-muted-foreground uppercase backdrop-blur-sm">
@@ -44,7 +50,7 @@ export default async function Page() {
             Find Lobby
           </Link>
         </Button>
-        <CreateLobbyButton />
+        <CreateLobbyButton disabled={!user} />
       </div>
     </section>
   )
